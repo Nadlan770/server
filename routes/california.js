@@ -33,7 +33,7 @@ router.get("/californiaList", async (req, res) => {
         let jsonString = JSON.stringify(data);
 
         const arr = JSON.parse(jsonString);
-        arr.forEach(data => renameKey(data, 'longitude', 'lon'));
+        arr.forEach(data => renameKey(data, 'longitude', 'lng'));
         arr.forEach(data => renameKey(data, 'latitude', 'lat'));
         arr.forEach(data => renameKey(data, 'median_house_value', 'price'));
 
