@@ -9,17 +9,16 @@ const cors = require("cors");
 const fileUpload = require("express-fileupload");
 
 const { routesInit } = require("./routes/configRoutes");
-const { log } = require("console");
 
 //for mongo
-// require("./db/mongoConnect");
+require("./db/mongoConnect");
 
 
-// connect to sql
-require("./db/sqlConnect");
+// // connect to sql
+// require("./db/sqlConnect");
 
-//created the sql table
-require("./routes/sqlRoutes");
+// //created the sql table
+// require("./routes/sqlRoutes");
 
 const app = express();
 app.use(cors());
