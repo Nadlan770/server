@@ -30,7 +30,7 @@ async function main() {
     // to ignore the warning in the terminal
     mongoose.set('strictQuery', false);
     // for windows 11
-    await mongoose.connect(configs.db_local_url);
+    await mongoose.connect(configs.db_url);
     console.log("mongo connect Nadlan770!");
 }
 // const mongoose = require("mongoose");
