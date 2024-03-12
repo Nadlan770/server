@@ -1,5 +1,6 @@
 const mongoose = require("mongoose");
 const joi = require("joi");
+
 const californiaSchema = new mongoose.Schema({
     longitude: String,
     latitude: String,
