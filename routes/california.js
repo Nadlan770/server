@@ -37,7 +37,7 @@ router.get("/californiaList", async (req, res) => {
         arr.forEach(data => renameKey(data, 'latitude', 'lat'));
         arr.forEach(data => renameKey(data, 'median_house_value', 'price'));
 
-        console.log(arr);
+        // console.log(arr);
         res.json(arr);
     }
     catch (err) {
