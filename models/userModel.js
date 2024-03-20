@@ -3,45 +3,36 @@ const joi = require("joi");
 const jwt = require("jsonwebtoken");
 const { configs } = require("../configs/secrets");
 
-//schema for user that shuld have thoose params
 const userSchema = new mongoose.Schema({
-    name: String,
+    nickName: String,
     email: String,
     password: String,
-    birth_year: String,
-    phone: String,
-    date_created: {
-        type: Date, default: Date.now
-    },
-    role: {
-        //by default the role are user
-        type: String, default: "user"
-    }
-})
+    drone: String,
+    role: { type: String, default: "user" },
+    fav_ar: { type: Array, default: [] },
+    own: { type: Array, default: [] }
+}, { timestamps: true });
+
 exports.UserModel = mongoose.model("users", userSchema);
 
-//createing token that includs the role if admin or user and valid for 10 hours
-exports.createToken = (user_id, role) => {
-    let token = jwt.sign({ _id: user_id, role: role }, configs.token_secret, { expiresIn: "600mins" });
+exports.createToken = (user_id, role = "user", nickName, drone) => {
+    const token = jwt.sign({ _id: user_id, role, nickName, drone }, configs.TOKENSECRET, { expiresIn: "60000mins" })
     return token;
 }
 
-//check by joi if put correct detsils and check in server side before sending to the DB
 exports.validateUser = (_reqBody) => {
-    let joiSchema = joi.object({
-        name: joi.string().min(2).max(150).required(),
-        email: joi.string().min(2).max(150).email().required(),
+    const joiSchema = joi.object({
+        nickName: joi.string().min(3).max(20).required(),
+        email: joi.string().min(2).max(200).email().required(),
         password: joi.string().min(3).max(150).required(),
-        birth_year: joi.string().min(2).max(150).required(),
-        phone: joi.string().min(2).max(150).required()
+        drone: joi.string().min(1).max(50).allow(null, '')
     })
     return joiSchema.validate(_reqBody);
 }
 
-//check the logIn user same check by joi
 exports.validateLogin = (_reqBody) => {
-    let joiSchema = joi.object({
-        email: joi.string().min(2).max(150).email().required(),
+    const joiSchema = joi.object({
+        email: joi.string().min(2).max(200).email().required(),
         password: joi.string().min(3).max(150).required()
     })
     return joiSchema.validate(_reqBody);

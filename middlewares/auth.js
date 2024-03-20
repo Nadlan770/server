@@ -1,46 +1,35 @@
+const jwt = require("jsonwebtoken");
 const { configs } = require("../configs/secrets");
 
-//create authnticate for users useing token
-const jwt = require("jsonwebtoken");
-
-//the next will work just if pass the res
 exports.auth = (req, res, next) => {
-    // sending the token in header (not in body that will be expose) and using the x-api-key
-    let token = req.header("x-api-key");
-    //check if send any token
+    const token = req.header("x-api-key");
     if (!token) {
-        return res.status(401).json({ msg: "you must send token in header in this endPoint" });
+        return res.status(401).json({ err: "token not found" });
     }
     try {
-        //verify the token
-        let decodeToken = jwt.verify(token, configs.token_secret);
-        // when i send it another func can use it by req.tokenData (and after next)
+        const decodeToken = jwt.verify(token, configs.TOKENSECRET);
         req.tokenData = decodeToken;
         next();
     }
     catch (err) {
-        // if after all the checking so the token are problem
-        return res.status(401).json({ msg: "token invalid or expired" })
+        res.status(401).json({ error: err, err: "token invalid or expired" })
     }
 }
 
-//auth for admon only
 exports.authAdmin = (req, res, next) => {
-    let token = req.header("x-api-key");
+    const token = req.header("x-api-key");
     if (!token) {
-        return res.status(401).json({ msg: "you must send token in header in this endPoint" });
+        return res.status(401).json({ err: "token not found" });
     }
     try {
-        let decodeToken = jwt.verify(token, configs.token_secret);
-        if (decodeToken.role != "admin") {
-
-            return res.status(401).json({ msg: "just admin can be in this endPoint" });
+        const decodeToken = jwt.verify(token, configs.TOKENSECRET);
+        if (decodeToken.role != "admin" && decodeToken.role != "superAdmin") {
+            return res.status(401).json({ err: "not admin" })
         }
         req.tokenData = decodeToken;
         next();
     }
     catch (err) {
-        return res.status(401).json({ msg: "token invalid Or expired" });
+        res.status(401).json({ err, err: "token invalid or expired" })
     }
 }
-
