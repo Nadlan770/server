@@ -50,7 +50,7 @@ router.get("/californiaList", async (req, res) => {
 
 //rout bring population ocean_proximity households
 router.get("/californiaOtherList", async (req, res) => {
-    let perPage = Math.min(req.query.perPage, 20) || 500;
+    let perPage = Math.min(req.query.perPage, 20) || 2000;
     let page = req.query.page - 1 || 0;
     let sort = req.query.sort || "_id";
     let reverse = req.query.reverse == "yes" ? 1 : -1;
